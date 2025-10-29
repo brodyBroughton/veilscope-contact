@@ -88,7 +88,7 @@ export default function ContactPage() {
             <form id="contact-form" className="form-card" onSubmit={onSubmit} noValidate>
               <div className="form-row">
                 <label htmlFor="name">Full name</label>
-                <input id="name" name="name" type="text" />
+                <input id="name" name="name" type="text" required/>
               </div>
 
               <div className="form-row">
