@@ -83,8 +83,8 @@ export default function ContactPage() {
           </nav>
 
           <div className="nav-actions">
-            <a className="btn btn-login" href="https://app.veilscope.com/login">Log In</a>
-            <a className="btn btn-get-started" href="https://app.veilscope.com/signup">Get Started</a>
+            <a className="btn btn-login" href="https://veilscope.com/webapp.html">Log In</a>
+            <a className="btn btn-get-started" href="https://veilscope.com/webapp.html">Get Started</a>
           </div>
 
           <label className="hamburger" htmlFor="nav-toggle" aria-controls="mobile-menu" aria-expanded="false">
@@ -100,8 +100,8 @@ export default function ContactPage() {
           <a className="drawer-link" href="https://veilscope.com/updates.html">Project Updates</a>
         </nav>
         <div className="drawer-actions">
-          <a className="btn btn-get-started" href="https://app.veilscope.com/signup">Get Started</a>
-          <a className="btn btn-login" href="https://app.veilscope.com/login">Log In</a>
+          <a className="btn btn-get-started" href="https://veilscope.com/webapp.html">Get Started</a>
+          <a className="btn btn-login" href="https://veilscope.com/webapp.html">Log In</a>
         </div>
       </aside>
 
