@@ -3,20 +3,45 @@
 import nodemailer from "nodemailer";
 
 export const runtime = "nodejs";
-export const dynamic = "force-dynamic"; // ensures this route is always treated dynamically (no caching)
+export const dynamic = "force-dynamic";
 
 export async function POST(request) {
   try {
     const body = await request.json();
     const { name, email, topic, message } = body;
 
-    if (!email || !message) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Server-side validation
+    if (!name || typeof name !== "string" || !name.trim()) {
       return new Response(
-        JSON.stringify({ error: "Email and message are required." }),
+        JSON.stringify({ error: "Name is required." }),
         { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
 
+    if (!email || typeof email !== "string" || !emailPattern.test(email)) {
+      return new Response(
+        JSON.stringify({ error: "Valid email is required." }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!topic || typeof topic !== "string" || !topic.trim()) {
+      return new Response(
+        JSON.stringify({ error: "Topic is required." }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!message || typeof message !== "string" || !message.trim()) {
+      return new Response(
+        JSON.stringify({ error: "Message is required." }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // create transporter
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT || 465),
@@ -30,10 +55,14 @@ export async function POST(request) {
     await transporter.sendMail({
       from: `"${process.env.FROM_NAME || "Website Contact"}" <${process.env.FROM_EMAIL}>`,
       to: process.env.SUPPORT_TO,
-      subject: `New contact form submission: ${topic || "General"} from ${name || "Anonymous"}`,
-      replyTo: email,
-      text: `Topic: ${topic || "General"}\n\nMessage:\n${message}`,
-      html: `<p><strong>Topic:</strong> ${topic || "General"}</p><p>${message.replace(/\n/g, "<br>")}</p>`,
+      subject: `New contact form submission: ${topic.trim()} from ${name.trim()} <${email.trim()}>`,
+      replyTo: email.trim(),
+      text: `Name: ${name.trim()}\nEmail: ${email.trim()}\nTopic: ${topic.trim()}\n\nMessage:\n${message.trim()}`,
+      html: `<p><strong>Name:</strong> ${name.trim()}</p>
+             <p><strong>Email:</strong> ${email.trim()}</p>
+             <p><strong>Topic:</strong> ${topic.trim()}</p>
+             <p><strong>Message:</strong></p>
+             <p>${message.trim().replace(/\n/g, "<br>")}</p>`,
     });
 
     return new Response(

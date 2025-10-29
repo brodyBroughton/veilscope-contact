@@ -1,35 +1,65 @@
-// app/page.js
 'use client';
 
 import { useState } from 'react';
 
 export default function ContactPage() {
   const [msg, setMsg] = useState({ type: '', text: '' });
+  const [submitting, setSubmitting] = useState(false);
   const year = new Date().getFullYear();
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   async function onSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
+
+    // Client-side validation
+    if (!data.name || !data.name.trim()) {
+      setMsg({ type: 'error', text: 'Please enter your name.' });
+      return;
+    }
+    if (!data.email || !emailPattern.test(data.email)) {
+      setMsg({ type: 'error', text: 'Please enter a valid email address.' });
+      return;
+    }
+    if (!data.topic || !data.topic.trim()) {
+      setMsg({ type: 'error', text: 'Please select a topic.' });
+      return;
+    }
+    if (!data.message || !data.message.trim()) {
+      setMsg({ type: 'error', text: 'Please enter your message.' });
+      return;
+    }
+
+    setSubmitting(true);
+    setMsg({ type: '', text: '' });
+
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: data.name || '',
-          email: data.email || '',
-          topic: data.topic || '',
-          message: data.message || '',
+          name: data.name.trim(),
+          email: data.email.trim(),
+          topic: data.topic.trim(),
+          message: data.message.trim(),
         }),
       });
+
       if (res.ok) {
         setMsg({ type: 'success', text: 'Thanks — your message was sent!' });
         form.reset();
       } else {
-        setMsg({ type: 'error', text: 'Sorry, sending failed. Please try again.' });
+        const err = await res.json();
+        const errMsg = err?.error || 'Sorry, sending failed. Please try again.';
+        setMsg({ type: 'error', text: errMsg });
       }
-    } catch {
+    } catch (error) {
+      console.error('Submission error:', error);
       setMsg({ type: 'error', text: 'Network error. Please try again.' });
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -88,17 +118,34 @@ export default function ContactPage() {
             <form id="contact-form" className="form-card" onSubmit={onSubmit} noValidate>
               <div className="form-row">
                 <label htmlFor="name">Full name</label>
-                <input id="name" name="name" type="text" required/>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  required
+                  disabled={submitting}
+                />
               </div>
 
               <div className="form-row">
                 <label htmlFor="email">Email</label>
-                <input id="email" name="email" type="email" required />
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  disabled={submitting}
+                />
               </div>
 
               <div className="form-row">
                 <label htmlFor="topic">Topic</label>
-                <select id="topic" name="topic" required>
+                <select
+                  id="topic"
+                  name="topic"
+                  required
+                  disabled={submitting}
+                >
                   <option value="">Choose a topic…</option>
                   <option>General</option>
                   <option>Partnership</option>
@@ -109,10 +156,18 @@ export default function ContactPage() {
 
               <div className="form-row">
                 <label htmlFor="message">Message</label>
-                <textarea id="message" name="message" rows={6} required></textarea>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={6}
+                  required
+                  disabled={submitting}
+                ></textarea>
               </div>
 
-              <button className="btn btn-get-started" type="submit">Send message</button>
+              <button className="btn btn-get-started" type="submit" disabled={submitting}>
+                {submitting ? 'Sending...' : 'Send message'}
+              </button>
               <p id="contact-msg" className={`form-msg ${msg.type ? msg.type : ''}`} aria-live="polite">
                 {msg.text}
               </p>
@@ -139,11 +194,18 @@ export default function ContactPage() {
             </a>
             <p className="footer-tagline">AI insights from public financial filings.</p>
 
-            <form className="newsletter" onSubmit={(e)=>e.preventDefault()} noValidate>
+            <form className="newsletter" onSubmit={(e) => e.preventDefault()} noValidate>
               <label className="newsletter-label" htmlFor="newsletter-email">Project Updates</label>
               <div className="newsletter-row">
-                <input id="newsletter-email" name="email" type="email" placeholder="you@example.com" required />
-                <button className="btn btn-get-started" type="submit">Subscribe</button>
+                <input
+                  id="newsletter-email"
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  required
+                  disabled={submitting}
+                />
+                <button className="btn btn-get-started" type="submit" disabled={submitting}>Subscribe</button>
               </div>
               <p className="newsletter-help">
                 By signing up, you agree to receive emails. Read our <a href="#">Privacy Policy</a>.
