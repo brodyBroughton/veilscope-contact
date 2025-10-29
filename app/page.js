@@ -1,65 +1,198 @@
-import Image from "next/image";
+// app/page.js
+'use client';
 
-export default function Home() {
+import { useState } from 'react';
+
+export default function ContactPage() {
+  const [msg, setMsg] = useState({ type: '', text: '' });
+  const year = new Date().getFullYear();
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form).entries());
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: data.name || '',
+          email: data.email || '',
+          topic: data.topic || '',
+          message: data.message || '',
+        }),
+      });
+      if (res.ok) {
+        setMsg({ type: 'success', text: 'Thanks — your message was sent!' });
+        form.reset();
+      } else {
+        setMsg({ type: 'error', text: 'Sorry, sending failed. Please try again.' });
+      }
+    } catch {
+      setMsg({ type: 'error', text: 'Network error. Please try again.' });
+    }
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+    <>
+      <a className="skip-link" href="#main">Skip to main content</a>
+      <input id="nav-toggle" className="nav-toggle" type="checkbox" aria-hidden="true" />
+
+      <header className="site-header">
+        <div className="nav-wrap">
+          <a className="brand" href="https://veilscope.com/">
+            <img className="brand-logo" src="/assets/img/logos/veilscope-logo-dark.svg" alt="Veilscope" />
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+          <nav className="primary-nav" aria-label="Primary">
+            <ul className="nav-list">
+              <li><a href="https://veilscope.com/learn-more.html">Learn More</a></li>
+              <li><a href="https://veilscope.com/about.html">About Us</a></li>
+              <li><a href="https://veilscope.com/updates.html">Project Updates</a></li>
+            </ul>
+          </nav>
+
+          <div className="nav-actions">
+            <a className="btn btn-login" href="https://app.veilscope.com/login">Log In</a>
+            <a className="btn btn-get-started" href="https://app.veilscope.com/signup">Get Started</a>
+          </div>
+
+          <label className="hamburger" htmlFor="nav-toggle" aria-controls="mobile-menu" aria-expanded="false">
+            <span className="bar"></span><span className="bar"></span><span className="bar"></span>
+          </label>
         </div>
+      </header>
+
+      <aside id="mobile-menu" className="mobile-drawer" aria-label="Mobile navigation">
+        <nav className="drawer-nav">
+          <a className="drawer-link" href="https://veilscope.com/learn-more.html">Learn More</a>
+          <a className="drawer-link" href="https://veilscope.com/about.html">About Us</a>
+          <a className="drawer-link" href="https://veilscope.com/updates.html">Project Updates</a>
+        </nav>
+        <div className="drawer-actions">
+          <a className="btn btn-get-started" href="https://app.veilscope.com/signup">Get Started</a>
+          <a className="btn btn-login" href="https://app.veilscope.com/login">Log In</a>
+        </div>
+      </aside>
+
+      <main id="main">
+        <section className="page-hero">
+          <div className="container">
+            <h1>Contact Us</h1>
+            <p>Questions, partnerships, or press — we’d love to hear from you.</p>
+          </div>
+        </section>
+
+        <section className="content-section">
+          <div className="container two-col">
+            <form id="contact-form" className="form-card" onSubmit={onSubmit} noValidate>
+              <div className="form-row">
+                <label htmlFor="name">Full name</label>
+                <input id="name" name="name" type="text" />
+              </div>
+
+              <div className="form-row">
+                <label htmlFor="email">Email</label>
+                <input id="email" name="email" type="email" required />
+              </div>
+
+              <div className="form-row">
+                <label htmlFor="topic">Topic</label>
+                <select id="topic" name="topic" required>
+                  <option value="">Choose a topic…</option>
+                  <option>General</option>
+                  <option>Partnership</option>
+                  <option>Press</option>
+                  <option>Support</option>
+                </select>
+              </div>
+
+              <div className="form-row">
+                <label htmlFor="message">Message</label>
+                <textarea id="message" name="message" rows={6} required></textarea>
+              </div>
+
+              <button className="btn btn-get-started" type="submit">Send message</button>
+              <p id="contact-msg" className={`form-msg ${msg.type ? msg.type : ''}`} aria-live="polite">
+                {msg.text}
+              </p>
+            </form>
+
+            <div className="contact-side">
+              <div className="card-placeholder">Map / Office / Social</div>
+              <ul className="contact-list">
+                <li><strong>Email:</strong> hello@veilscope.com</li>
+                <li><strong>Press:</strong> press@veilscope.com</li>
+                <li><strong>Careers:</strong> careers@veilscope.com</li>
+              </ul>
+            </div>
+          </div>
+        </section>
       </main>
-    </div>
+
+      <div className="footer-leadin" aria-hidden="true"></div>
+      <footer className="site-footer" role="contentinfo">
+        <div className="footer-wrap">
+          <section className="footer-brand">
+            <a className="brand brand--footer" href="https://veilscope.com/" aria-label="Veilscope Home">
+              <img className="brand-logo" src="/assets/img/logos/veilscope-logo-light.svg" alt="Veilscope" />
+            </a>
+            <p className="footer-tagline">AI insights from public financial filings.</p>
+
+            <form className="newsletter" onSubmit={(e)=>e.preventDefault()} noValidate>
+              <label className="newsletter-label" htmlFor="newsletter-email">Project Updates</label>
+              <div className="newsletter-row">
+                <input id="newsletter-email" name="email" type="email" placeholder="you@example.com" required />
+                <button className="btn btn-get-started" type="submit">Subscribe</button>
+              </div>
+              <p className="newsletter-help">
+                By signing up, you agree to receive emails. Read our <a href="#">Privacy Policy</a>.
+              </p>
+              <p className="newsletter-msg" aria-live="polite"></p>
+            </form>
+          </section>
+
+          <nav className="footer-col" aria-label="Explore">
+            <h3 className="footer-title">Explore</h3>
+            <ul className="footer-links">
+              <li><a href="https://veilscope.com/about.html">About Us</a></li>
+              <li><a href="https://veilscope.com/learn-more.html">About the Project</a></li>
+              <li><a href="https://veilscope.com/updates.html">Project Updates</a></li>
+              <li><a href="https://contact.veilscope.com/">Contact Us</a></li>
+              <li><a href="https://veilscope.com/learn-more.html#faq">Help &amp; FAQ</a></li>
+            </ul>
+          </nav>
+
+          <nav className="footer-col" aria-label="Connect">
+            <h3 className="footer-title">Connect</h3>
+            <ul className="footer-links">
+              <li><a href="#">Resources and References</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+            </ul>
+          </nav>
+
+          <nav className="footer-col" aria-label="Socials">
+            <h3 className="footer-title">Socials</h3>
+            <ul className="footer-links">
+              <li><a href="#">Newsletter</a></li>
+              <li><a href="#">Instagram</a></li>
+              <li><a href="#">TikTok</a></li>
+              <li><a href="#">Facebook</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <div className="footer-bottom">
+          <p className="copyright">© {year} Veilscope. All rights reserved.</p>
+          <ul className="legal-links">
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Status</a></li>
+            <li><a href="https://contact.veilscope.com/">Contact</a></li>
+          </ul>
+        </div>
+      </footer>
+    </>
   );
 }
