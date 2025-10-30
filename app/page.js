@@ -71,7 +71,7 @@ export default function ContactPage() {
       <header className="site-header">
         <div className="nav-wrap">
           <a className="brand" href="https://veilscope.com/">
-            <img className="brand-logo" src="/assets/img/logos/veilscope-logo-dark.svg" alt="Veilscope" />
+            <img className="brand-logo" src="/assets/img/logos/veilscope-logo-dark.svg" alt="Veilscope Logo" />
           </a>
 
           <nav className="primary-nav" aria-label="Primary">
