@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Veilscope Contact Form
+
+A Next.js 16 single-page contact experience for Veilscope with server-side email delivery through Nodemailer. The app provides accessibility-friendly navigation, responsive styling, and validation on both the client and server to ensure dependable submissions.
+
+## Features
+- **Contact workflow** with name, email, topic, and message fields, client-side validation, submission feedback, and loading states before sending to the API route.【F:app/page.js†L5-L76】【F:app/page.js†L101-L173】
+- **Email delivery** via a server-side route that validates payloads and sends messages through an SMTP transporter using environment variables.【F:app/api/contact/route.js†L1-L63】【F:app/api/contact/route.js†L66-L83】
+- **Responsive layout and accessibility** including skip links, keyboard-focus styling, and mobile navigation drawer backed by the shared CSS theme.【F:app/page.js†L80-L193】【F:app/contact.css†L1-L120】
+- **Brand-aligned UI** leveraging custom typography, header/footer chrome, and sectioned layouts to match the marketing site.【F:app/layout.js†L1-L27】【F:app/page.js†L181-L230】【F:app/contact.css†L120-L260】
+
+## Tech Stack
+- [Next.js 16](https://nextjs.org/) (App Router)
+- React 19
+- Nodemailer for SMTP email delivery
+- Vanilla CSS with custom design tokens
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18.18+ (aligned with Next.js 16 requirements)
+- npm (bundled with Node.js)
 
+### Installation
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Local Development
+```bash
+npm run dev
+```
+The app will be available at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Production Build
+```bash
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Linting
+```bash
+npm run lint
+```
 
-## Learn More
+## Environment Variables
+Define the following variables (for example in a `.env.local` file) to enable SMTP delivery:
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Description |
+| --- | --- |
+| `SMTP_HOST` | SMTP server host. |
+| `SMTP_PORT` | SMTP server port (defaults to `465` if not set). |
+| `SMTP_SECURE` | Set to `false` to disable TLS; defaults to secure mode. |
+| `SMTP_USER` | Username for SMTP authentication. |
+| `SMTP_PASS` | Password for SMTP authentication. |
+| `FROM_NAME` | Friendly sender name shown in outgoing emails. |
+| `FROM_EMAIL` | Sender email address used in the `from` header. |
+| `SUPPORT_TO` | Destination address that receives contact form submissions. |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## API
+- **POST `/api/contact`** — Accepts `{ name, email, topic, message }` JSON payloads. Performs server-side validation, then sends the email via Nodemailer using the configured SMTP transport. Returns `200` on success or `4xx/5xx` JSON errors on validation or delivery issues.【F:app/api/contact/route.js†L8-L83】
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
+- `app/layout.js` — Global metadata, font loading, and root HTML shell.【F:app/layout.js†L1-L27】
+- `app/page.js` — Contact page UI and client-side submission logic.【F:app/page.js†L1-L230】
+- `app/api/contact/route.js` — API route handling validation and email sending.【F:app/api/contact/route.js†L1-L83】
+- `app/contact.css` — Shared design system and page styling for layout, navigation, and forms.【F:app/contact.css†L1-L260】
 
-## Deploy on Vercel
+## Accessibility and UX Notes
+- Includes a “Skip to main content” link, focus-visible outlines, and ARIA labeling for navigation menus to support keyboard and screen-reader users.【F:app/page.js†L78-L119】【F:app/contact.css†L15-L45】
+- Displays contextual error and success messaging near the submit button and disables inputs while requests are in-flight to prevent duplicate submissions.【F:app/page.js†L11-L76】【F:app/page.js†L141-L174】
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+The app is compatible with standard Next.js hosting providers. Ensure all environment variables are configured on the target platform before deploying, then run `npm run build` followed by `npm run start` or use your platform’s build pipeline.
