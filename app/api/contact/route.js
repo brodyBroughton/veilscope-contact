@@ -1,5 +1,3 @@
-// app/api/contact/route.js
-
 import nodemailer from "nodemailer";
 
 export const runtime = "nodejs";
@@ -12,7 +10,7 @@ export async function POST(request) {
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // Server-side validation
+    // Validate required fields on the server
     if (!name || typeof name !== "string" || !name.trim()) {
       return new Response(
         JSON.stringify({ error: "Name is required." }),
@@ -41,7 +39,7 @@ export async function POST(request) {
       );
     }
 
-    // create transporter
+    // Configure SMTP transporter with environment variables
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT || 465),

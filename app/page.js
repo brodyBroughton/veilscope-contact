@@ -14,7 +14,7 @@ export default function ContactPage() {
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
 
-    // Client-side validation
+    // Validate required fields before submitting to the API
     if (!data.name || !data.name.trim()) {
       setMsg({ type: 'error', text: 'Please enter your name.' });
       return;

@@ -1,6 +1,5 @@
-// app/layout.js
 import { Geist, Geist_Mono } from "next/font/google";
-import "./contact.css";  // import your combined global + contact page CSS
+import "./contact.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
