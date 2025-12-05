@@ -114,7 +114,7 @@ export default function ContactPage() {
         </section>
 
         <section className="content-section">
-          <div className="container two-col">
+          <div className="container contact-layout">
             <form id="contact-form" className="form-card" onSubmit={onSubmit} noValidate>
               <div className="form-row">
                 <label htmlFor="name">Full name</label>
@@ -168,19 +168,14 @@ export default function ContactPage() {
               <button className="btn btn-get-started" type="submit" disabled={submitting}>
                 {submitting ? 'Sending...' : 'Send message'}
               </button>
-              <p id="contact-msg" className={`form-msg ${msg.type ? msg.type : ''}`} aria-live="polite">
+              <p
+                id="contact-msg"
+                className={`form-msg ${msg.type ? msg.type : ''}`}
+                aria-live="polite"
+              >
                 {msg.text}
               </p>
             </form>
-
-            <div className="contact-side">
-              <div className="card-placeholder">Map / Office / Social</div>
-              <ul className="contact-list">
-                <li><strong>Email:</strong> hello@veilscope.com</li>
-                <li><strong>Press:</strong> press@veilscope.com</li>
-                <li><strong>Careers:</strong> careers@veilscope.com</li>
-              </ul>
-            </div>
           </div>
         </section>
       </main>
