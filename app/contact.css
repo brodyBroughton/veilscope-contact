@@ -325,6 +325,19 @@ img,svg{max-width:100%;height:auto;display:block}
   align-items: start;
 }
 
+/* Single-column centered contact layout */
+.content-section .container.contact-layout{
+  display: flex;
+  justify-content: center;
+}
+
+/* Keep the form nicely sized on large screens, full-width on mobile */
+.content-section .container.contact-layout .form-card{
+  width: 100%;
+  max-width: 640px;
+}
+
+
 /* ---------- Form card ---------- */
 .form-card{
   background: #fff;
