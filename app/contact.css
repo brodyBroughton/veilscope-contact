@@ -181,13 +181,9 @@ img,svg{max-width:100%;height:auto;display:block}
 .brand--footer .brand-logo{height:34px}
 .footer-title{margin:0 0 12px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#CBD5E1;font-weight:800}
 .footer-links{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.newsletter{margin-top:12px}
-.newsletter-label{display:block;font-weight:800;color:#fff;margin-bottom:8px}
-.newsletter-row{display:flex;gap:10px;align-items:center}
-.newsletter input{flex:1 1 auto;height:44px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:#374151;color:#fff;padding:0 12px;font:inherit}
-.newsletter input::placeholder{color:#9CA3AF}
-.newsletter .btn-get-started{padding:12px 16px}
-.newsletter-help{margin:8px 0 0;font-size:12px;color:#CBD5E1}
+.newsletter{margin-top:12px;display:grid;gap:10px;max-width:360px}
+.newsletter-label{margin:0;font-weight:800;color:#fff;line-height:1.5}
+.newsletter-cta{padding:12px 16px;align-self:flex-start}
 
 .footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1200px;margin:0 auto}
 @media (max-width:700px){.footer-bottom{flex-direction:column;align-items:flex-start}}

@@ -189,24 +189,14 @@ export default function ContactPage() {
             </a>
             <p className="footer-tagline">AI insights from public financial filings.</p>
 
-            <form className="newsletter" onSubmit={(e) => e.preventDefault()} noValidate>
-              <label className="newsletter-label" htmlFor="newsletter-email">Project Updates</label>
-              <div className="newsletter-row">
-                <input
-                  id="newsletter-email"
-                  name="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  required
-                  disabled={submitting}
-                />
-                <button className="btn btn-get-started" type="submit" disabled={submitting}>Subscribe</button>
-              </div>
-              <p className="newsletter-help">
-                By signing up, you agree to receive emails. Read our <a href="#">Privacy Policy</a>.
+            <div className="newsletter">
+              <p className="newsletter-label">
+                Occasional updates on product progress, new features, and research notes.
               </p>
-              <p className="newsletter-msg" aria-live="polite"></p>
-            </form>
+              <a className="btn btn-get-started newsletter-cta" href="https://veilscope.com/updates.html">
+                View Updates
+              </a>
+            </div>
           </section>
 
           <nav className="footer-col" aria-label="Explore">
